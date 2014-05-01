@@ -41,6 +41,12 @@ object TestData {
       TestData2(3, 2) :: Nil)
   testData2.registerAsTable("testData2")
 
+  case class TestDataLarge(a: Int, b:Int)
+  val testDataLarge: SchemaRDD =
+    TestSQLContext.sparkContext.parallelize(
+      (1 to 10000000).map(i => TestData2(i%1000, i%1000)))
+  testDataLarge.registerAsTable("testDataLarge")
+
   // TODO: There is no way to express null primitives as case classes currently...
   val testData3 =
     logical.LocalRelation('a.int, 'b.int).loadData(
